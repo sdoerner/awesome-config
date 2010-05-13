@@ -9,20 +9,16 @@ require("naughty")
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
--- The default is a dark theme
 theme_path = "/usr/share/awesome/themes/default/theme.lua"
--- Uncommment this for a lighter theme
---theme_path = "/usr/share/awesome/themes/sky/theme"
-
 -- Actually load theme
 beautiful.init(theme_path)
---wallpaper is set in /usr/share/awesome/themes/default/theme
 
 -- This is used later as the default terminal and editor to run.
 terminal = "urxvt"
 editor = "vim"
 editor_cmd = terminal .. " -e " .. editor
-
+filemanager = "dolphin"
+filemanager_logo = "/usr/share/icons/oxygen/16x16/actions/view-list-icons.png"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -30,10 +26,8 @@ editor_cmd = terminal .. " -e " .. editor
 -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
 -- However, you can use another modifier like Mod1, but it may interact with others.
 modkey = "Mod4"
---Mod1 = Alt
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
---
 layouts =
 {
     awful.layout.suit.tile,
@@ -49,10 +43,6 @@ layouts =
     awful.layout.suit.magnifier,
     awful.layout.suit.floating
 }
-
-
--- Define if we want to use titlebar on all applications.
-use_titlebar = false
 -- }}}
 
 -- {{{ Tags
@@ -65,14 +55,14 @@ end
 -- }}}
 
 -- {{{ Menu
-
 -- Create a laucher widget and a main menu
 networkmenu =
 {
   { "Firefox", "firefox", "/usr/lib/mozilla-firefox/chrome/icons/default/default16.png" },
   { "Thunderbird", "thunderbird", "/usr/share/pixmaps/thunderbird-icon.png" },
-  { "Kopete", "kopete"},
+  { "Kopete", "kopete" },
   { "VNC Viewer", "vncviewer", "/usr/share/pixmaps/vncviewer.png" },
+  { "Gobby", "gobby","/usr/share/pixmaps/gobby.png" }
 }
 
 officemenu =
@@ -92,6 +82,7 @@ graphicsmenu =
   { "Inkscape", "inkscape", "/usr/share/pixmaps/inkscape.png" },
   { "OO Draw", "oodraw", "/usr/share/pixmaps/ooo-draw.png" },
   { "Okular", "okular", "/usr/share/icons/hicolor/16x16/apps/okular.png" },
+  { "Blender", "blender" }
 }
 
 multimediamenu =
@@ -117,7 +108,8 @@ mainmenu = awful.menu.new( { items = {
     { "Eclipse", "eclipse-3.5 -nosplash","/usr/lib/eclipse-3.5/icon.xpm" },
     { "awesome", awesomemenu, beautiful.awesome_icon },
     { "Taskmanager", "/usr/bin/ksysguard", "/usr/share/icons/oxygen/16x16/apps/computer.png" },
-    { "Files", "dolphin ~" },
+    { "Kcalc", "kcalc" , "/usr/share/icons/oxygen/22x22/apps/accessories-calculator.png" },
+    { "Files", filemanager, filemanager_logo },
     { "Druckereinstellungen", "kcmshell printers"},
     { "open terminal", terminal }
     } })
@@ -125,14 +117,14 @@ mainmenu = awful.menu.new( { items = {
 -- }}}
 
 -- {{{ Wibox
--- Create a textbox widget
+-- Create a textclock widget
 mytextclock = awful.widget.textclock({ align = "right" })
 
 mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
                                      menu = mainmenu })
 
 -- Create a systray
-mysystray = widget({ type = "systray"})
+mysystray = widget({ type = "systray" })
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -142,7 +134,7 @@ mytaglist = {}
 mytaglist.buttons = awful.util.table.join(
                       awful.button({ }, 1, awful.tag.viewonly),
                       awful.button({ modkey }, 1, awful.client.movetotag),
-                      awful.button({ }, 3, function (tag) tag.selected = not tag.selected end),
+                      awful.button({ }, 3, awful.tag.viewtoggle),
                       awful.button({ modkey }, 3, awful.client.toggletag),
                       awful.button({ }, 4, awful.tag.viewnext),
                       awful.button({ }, 5, awful.tag.viewprev)
@@ -173,7 +165,7 @@ mytasklist.buttons = awful.util.table.join(
 
 for s = 1, screen.count() do
     -- Create a promptbox for each screen
-    mypromptbox[s] = widget({ type = "textbox", align = "left" })
+    mypromptbox[s] = awful.widget.prompt({ layout = awful.widget.layout.horizontal.leftright })
     -- Create an imagebox widget which will contains an icon indicating which layout we're using.
     -- We need one layoutbox per screen.
     mylayoutbox[s] = awful.widget.layoutbox(s)
@@ -192,10 +184,10 @@ for s = 1, screen.count() do
                            end, mytasklist.buttons)
 
     -- Create the wibox
-    mywibox[s] = awful.wibox({ position = "top", screen = s})
+    mywibox[s] = awful.wibox({ position = "top", screen = s })
     -- Add widgets to the wibox - order matters
     mywibox[s].widgets =
-    { 
+    {
       {
         mylauncher,
         mytaglist[s],
@@ -212,26 +204,15 @@ end
 -- }}}
 
 -- {{{ Mouse bindings
-root.buttons({
+root.buttons(awful.util.table.join(
     awful.button({ }, 3, function () mainmenu:toggle() end),
     awful.button({ }, 4, awful.tag.viewnext),
     awful.button({ }, 5, awful.tag.viewprev)
-})
+))
 -- }}}
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
-    awful.key({                   }, "XF86KbdLightOnOff", function ()
-                              local status = tonumber(awful.util.pread("xbacklight -get"))
-                              local value = (status == 0) and 100 or 0
-                              awful.util.spawn("xbacklight -set "..value)
-                              end),
-    awful.key({                   }, "XF86MonBrightnessDown", function ()
-                              awful.util.spawn("xbacklight -dec 10")
-                              end),
-    awful.key({                   }, "XF86MonBrightnessUp", function ()
-                              awful.util.spawn("xbacklight -inc 10",1)
-                              end),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
@@ -241,7 +222,6 @@ globalkeys = awful.util.table.join(
             awful.client.focus.byidx( 1)
             if client.focus then client.focus:raise() end
         end),
-
     awful.key({ modkey,           }, "k",
         function ()
             awful.client.focus.byidx(-1)
@@ -249,10 +229,10 @@ globalkeys = awful.util.table.join(
         end),
 
     -- Layout manipulation
-    awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1) end),
-    awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1) end),
-    awful.key({ modkey, "Control" }, "j", function () awful.screen.focus( 1)       end),
-    awful.key({ modkey, "Control" }, "k", function () awful.screen.focus(-1)       end),
+    awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end),
+    awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)    end),
+    awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end),
+    awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end),
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
     awful.key({ modkey,           }, "Tab",
         function ()
@@ -299,11 +279,8 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Shift" }, "i", function () awful.util.spawn("kopete") end),
     awful.key({ modkey, "Shift" }, "e", function () awful.util.spawn("eclipse-3.5 -nosplash") end),
     awful.key({ modkey, "Shift" }, "o", function () awful.util.spawn("oowriter") end),
-    awful.key({ modkey, "Shift" }, "b", function () awful.util.spawn("dolphin") end),
-    awful.key({ modkey, "Shift" }, "o", function()
-    client.focus.opacity = 1
-    --naughty.notify({ text="setting opacity", title="Opened", timeout=15 })
-    end))
+    awful.key({ modkey, "Shift" }, "b", function () awful.util.spawn(filemanager) end)
+)
 
 -- Client awful tagging: this is useful to tag some clients and then do stuff like move to tag on them
 clientkeys = awful.util.table.join(
@@ -313,14 +290,11 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
     awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
     awful.key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
+    awful.key({ modkey,           }, "n",      function (c) c.minimized = not c.minimized    end),
     awful.key({ modkey }, "t", awful.client.togglemarked),
-    awful.key({ modkey,}, "m",
+    awful.key({ modkey }, "m",
         function (c)
             c.maximized_horizontal = not c.maximized_horizontal
-            c.maximized_vertical   = not c.maximized_vertical
-        end),
-    awful.key({ modkey,}, "F6",
-        function (c)
             c.maximized_vertical   = not c.maximized_vertical
         end)
 )
@@ -330,7 +304,6 @@ keynumber = 0
 for s = 1, screen.count() do
    keynumber = math.min(9, math.max(#tags[s], keynumber));
 end
-
 
 -- Bind all key numbers to tags.
 -- Be careful: we use keycodes to make it works on any keyboard layout.
@@ -364,7 +337,6 @@ for i = 1, keynumber do
                       end
                   end))
 end
-
 
 -- Set keys
 root.keys(globalkeys)
