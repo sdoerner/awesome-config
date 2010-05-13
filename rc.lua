@@ -257,19 +257,13 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
 
     -- Prompt
-    awful.key({ modkey }, "F1",
-        function ()
-            awful.prompt.run({ prompt = "Run: " },
-            mypromptbox[mouse.screen],
-            awful.util.spawn, awful.completion.bash,
-            awful.util.getdir("cache") .. "/history")
-        end),
+    awful.key({ modkey }, "r", function () mypromptbox[mouse.screen]:run() end),
 
-    awful.key({ modkey }, "F4",
+    awful.key({ modkey }, "x",
         function ()
             awful.prompt.run({ prompt = "Run Lua code: " },
-            mypromptbox[mouse.screen],
-            awful.util.eval, awful.prompt.bash,
+            mypromptbox[mouse.screen].widget,
+            awful.util.eval, nil,
             awful.util.getdir("cache") .. "/history_eval")
         end),
     --My Bindings
