@@ -409,7 +409,7 @@ awful.rules.rules =  {
     { class = "maple.exe" }, 
     properties = { tag = tags[1][8] } },
   { rule = 
-    { class = "otr.py" }, 
+    { class = "Otr.py" }, 
     properties = { tag = tags[1][8] } },
   { rule = 
     { class = "tvbrowser-TVBrowser" }, 
