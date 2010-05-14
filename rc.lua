@@ -60,7 +60,7 @@ networkmenu =
 {
   { "Firefox", "firefox", "/usr/lib/mozilla-firefox/chrome/icons/default/default16.png" },
   { "Thunderbird", "thunderbird", "/usr/share/pixmaps/thunderbird-icon.png" },
-  { "Kopete", "kopete" },
+  { "Kopete", "kopete", "/usr/share/icons/hicolor/16x16/apps/kopete.png" },
   { "VNC Viewer", "vncviewer", "/usr/share/pixmaps/vncviewer.png" },
   { "Gobby", "gobby","/usr/share/pixmaps/gobby.png" }
 }
@@ -110,7 +110,6 @@ mainmenu = awful.menu.new( { items = {
     { "Taskmanager", "/usr/bin/ksysguard", "/usr/share/icons/oxygen/16x16/apps/computer.png" },
     { "Kcalc", "kcalc" , "/usr/share/icons/oxygen/22x22/apps/accessories-calculator.png" },
     { "Files", filemanager, filemanager_logo },
-    { "Druckereinstellungen", "kcmshell printers"},
     { "open terminal", terminal }
     } })
 
