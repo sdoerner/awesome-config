@@ -418,7 +418,7 @@ awful.rules.rules =  {
     { class = "Kopete" }, 
     properties = { tag = tags[1][9], maximized_vertical = true } },
   { rule = 
-    { class = "amarok" }, 
+    { class = "Amarok" },
     properties = { tag = tags[1][9] } }
 }
 
