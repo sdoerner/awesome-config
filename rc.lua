@@ -244,7 +244,7 @@ globalkeys = awful.util.table.join(
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
-    awful.key({ modkey, "Shift"   }, "q", awesome.quit),
+    --awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 
     awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)    end),
     awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)    end),
@@ -268,9 +268,9 @@ globalkeys = awful.util.table.join(
     --My Bindings
     awful.key({ modkey, "Shift" }, "f", function () awful.util.spawn("firefox") end),
     awful.key({ modkey, "Shift" }, "t", function () awful.util.spawn("thunderbird") end),
-    awful.key({ modkey, "Shift" }, "a", function () awful.util.spawn("amarok") end),
+    --awful.key({ modkey, "Shift" }, "a", function () awful.util.spawn("amarok") end),
     awful.key({ modkey, "Shift" }, "i", function () awful.util.spawn("kopete") end),
-    awful.key({ modkey, "Shift" }, "e", function () awful.util.spawn("eclipse-3.5 -nosplash") end),
+    --awful.key({ modkey, "Shift" }, "e", function () awful.util.spawn("eclipse-3.5 -nosplash") end),
     awful.key({ modkey, "Shift" }, "o", function () awful.util.spawn("oowriter") end),
     awful.key({ modkey, "Shift" }, "b", function () awful.util.spawn(filemanager) end)
 )
@@ -298,32 +298,34 @@ for s = 1, screen.count() do
    keynumber = math.min(9, math.max(#tags[s], keynumber));
 end
 
+tagKeys = { "1", "2", "3", "q", "w", "e", "a", "s", "d" }
+
 -- Bind all key numbers to tags.
 -- Be careful: we use keycodes to make it works on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
 for i = 1, keynumber do
     globalkeys = awful.util.table.join(globalkeys,
-        awful.key({ modkey }, "#" .. i + 9,
+        awful.key({ modkey }, tagKeys[i],
                   function ()
                         local screen = mouse.screen
                         if tags[screen][i] then
                             awful.tag.viewonly(tags[screen][i])
                         end
                   end),
-        awful.key({ modkey, "Control" }, "#" .. i + 9,
+        awful.key({ modkey, "Control" }, tagKeys[i],
                   function ()
                       local screen = mouse.screen
                       if tags[screen][i] then
                           awful.tag.viewtoggle(tags[screen][i])
                       end
                   end),
-        awful.key({ modkey, "Shift" }, "#" .. i + 9,
+        awful.key({ modkey, "Shift" }, tagKeys[i],
                   function ()
                       if client.focus and tags[client.focus.screen][i] then
                           awful.client.movetotag(tags[client.focus.screen][i])
                       end
                   end),
-        awful.key({ modkey, "Control", "Shift" }, "#" .. i + 9,
+        awful.key({ modkey, "Control", "Shift" }, tagKeys[i],
                   function ()
                       if client.focus and tags[client.focus.screen][i] then
                           awful.client.toggletag(tags[client.focus.screen][i])
@@ -364,7 +366,7 @@ awful.rules.rules =  {
     { class = "Download" }, 
     properties = { floating = true  } },
   { rule = 
-    { class = "skype" }, 
+    { class = "Skype" },
     properties = { floating = true  } },
   { rule = 
     { class = "kio_uiserver" }, --KDE copy window
