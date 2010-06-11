@@ -425,7 +425,10 @@ awful.rules.rules =  {
     properties = { tag = tags[1][9], maximized_vertical = true } },
   { rule = 
     { class = "Amarok" },
-    properties = { tag = tags[1][9] } }
+    properties = { tag = tags[1][9] } },
+  { rule =
+    { class = "Gobby" },
+    properties = { tag = tags[1][8] } },
 }
 
 -- }}}
