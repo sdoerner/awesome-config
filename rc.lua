@@ -59,6 +59,7 @@ end
 networkmenu =
 {
   { "Firefox", "firefox", "/usr/lib/mozilla-firefox/chrome/icons/default/default16.png" },
+  { "Chromium", "chromium", "/usr/share/pixmaps/chromium-browser.png" },
   { "Thunderbird", "thunderbird", "/usr/share/pixmaps/thunderbird-icon.png" },
   { "Kopete", "kopete", "/usr/share/icons/hicolor/16x16/apps/kopete.png" },
   { "VNC Viewer", "vncviewer", "/usr/share/pixmaps/vncviewer.png" },
@@ -267,6 +268,7 @@ globalkeys = awful.util.table.join(
         end),
     --My Bindings
     awful.key({ modkey, "Shift" }, "f", function () awful.util.spawn("firefox") end),
+    awful.key({ modkey, "Shift" }, "x", function () awful.util.spawn("chromium") end),
     awful.key({ modkey, "Shift" }, "t", function () awful.util.spawn("thunderbird") end),
     --awful.key({ modkey, "Shift" }, "a", function () awful.util.spawn("amarok") end),
     awful.key({ modkey, "Shift" }, "i", function () awful.util.spawn("kopete") end),
@@ -397,6 +399,9 @@ awful.rules.rules =  {
     { class = "Firefox" }, 
     properties = { tag = tags[1][2] } },
   { rule = 
+    { class = "Chrome" },
+    properties = { tag = tags[1][2] } },
+  { rule =
     { class = "Thunderbird" }, 
     properties = { tag = tags[1][4] } },
   { rule = 
