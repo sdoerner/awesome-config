@@ -358,7 +358,10 @@ awful.rules.rules =  {
                      buttons = clientbuttons } },
   { rule = 
     { class = "URxvt" }, 
-    properties = { size_hints_honor = false  } },
+    properties = { tag=tags[1][1], switchtotag = true, size_hints_honor = false } },
+  { rule =
+    { class = "Dolphin" },
+    properties = { tag=tags[1][3], switchtotag = true } },
   { rule = 
     { class = "pinentry" }, 
     properties = { floating = true  } },
