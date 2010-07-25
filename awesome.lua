@@ -78,7 +78,7 @@ officemenu =
   { "Maple 11", "env WINEPREFIX='/home/sdoerner/.wine' wine 'C:\\Programme\\Maple 11\\bin.win\\maplew.exe'" }
 }
 
-graphicsmenu = 
+graphicsmenu =
 {
   { "Gwenview", "gwenview", "/usr/share/icons/hicolor/16x16/apps/gwenview.png" },
   { "GIMP", "gimp", "/usr/share/icons/hicolor/16x16/apps/gimp.png" },
@@ -103,7 +103,7 @@ awesomemenu = {
    { "quit", awesome.quit }
 }
 
-mainmenu = awful.menu.new( { items = { 
+mainmenu = awful.menu.new( { items = {
     { "Grafik", graphicsmenu, "/usr/share/icons/gnome/16x16/categories/applications-graphics.png" },
     { "Multimedia", multimediamenu , "/usr/share/icons/hicolor/16x16/apps/amarok.png" },
     { "Netzwerk", networkmenu,"/usr/share/icons/gnome/16x16/categories/applications-internet.png" },
@@ -152,10 +152,10 @@ mytasklist.buttons = awful.util.table.join(
                                           client.focus = c
                                           c:raise()
                                       end),
-                       awful.button({ }, 3, function () 
+                       awful.button({ }, 3, function ()
                                               if instance then
                                                 instance:hide()
-                                              end 
+                                              end
                                               instance = awful.menu.clients({ width=250 }) end),
                        awful.button({ }, 4, function ()
                                           awful.client.focus.byidx(1)
@@ -382,7 +382,7 @@ clientbuttons = awful.util.table.join(
     awful.button({ modkey }, 3, awful.mouse.client.resize))
 -- }}}
 
--- {{{ Rules 
+-- {{{ Rules
 awful.rules.rules =  {
     { rule = { },
       properties = { border_width = beautiful.border_width,
@@ -390,8 +390,8 @@ awful.rules.rules =  {
                      focus = true,
                      keys = clientkeys,
                      buttons = clientbuttons } },
-  { rule = 
-    { class = "URxvt" }, 
+  { rule =
+    { class = "URxvt" },
     properties = { tag=tags[1][1], switchtotag = true, size_hints_honor = false } },
   { rule =
     { class = "Gitk" },
@@ -399,76 +399,76 @@ awful.rules.rules =  {
   { rule =
     { class = "Dolphin" },
     properties = { tag=tags[1][3], switchtotag = true } },
-  { rule = 
-    { class = "pinentry" }, 
+  { rule =
+    { class = "pinentry" },
     properties = { floating = true  } },
-  { rule = 
-    { class = "nepomukservicestub" }, 
+  { rule =
+    { class = "nepomukservicestub" },
     properties = { floating = true  } },
-  { rule = 
-    { class = "gimp" }, 
+  { rule =
+    { class = "gimp" },
     properties = { floating = true  } },
-  { rule = 
-    { class = "Download" }, 
+  { rule =
+    { class = "Download" },
     properties = { floating = true  } },
-  { rule = 
+  { rule =
     { class = "Skype" },
     properties = { floating = true  } },
-  { rule = 
+  { rule =
     { class = "kio_uiserver" }, --KDE copy window
     properties = { floating = true  } },
-  { rule = 
-    { class = "otrdecoder-gui" }, 
+  { rule =
+    { class = "otrdecoder-gui" },
     properties = { floating = true  } },
-  { rule = 
-    { instance = "Extension" }, 
+  { rule =
+    { instance = "Extension" },
     properties = { floating = true  } },
-  { rule = 
-    { instance = "Places" }, 
+  { rule =
+    { instance = "Places" },
     properties = { floating = true  } },
-  { rule = 
-    { instance = "Plasma" }, 
+  { rule =
+    { instance = "Plasma" },
     properties = { floating = true  } },
-  { rule = 
-    { instance = "kcalc" }, 
+  { rule =
+    { instance = "kcalc" },
     properties = { floating = true  } },
-  { rule = 
-    { instance = "kmix" }, 
+  { rule =
+    { instance = "kmix" },
     properties = { floating = true  } },
-  { rule = 
-    { class = "Firefox" }, 
+  { rule =
+    { class = "Firefox" },
     properties = { tag = tags[1][2] } },
-  { rule = 
+  { rule =
     { class = "Chrome" },
     properties = { tag = tags[1][2] } },
   { rule =
-    { class = "Thunderbird" }, 
+    { class = "Thunderbird" },
     properties = { tag = tags[1][4] } },
-  { rule = 
-    { class = "OpenOffice.org 3.2" }, 
+  { rule =
+    { class = "OpenOffice.org 3.2" },
     properties = { tag = tags[1][5] } },
-  { rule = 
-    { class = "Kdevelop.bin" }, 
+  { rule =
+    { class = "Kdevelop.bin" },
     properties = { tag = tags[1][6] } },
-  { rule = 
-    { class = "Eclipse" }, 
+  { rule =
+    { class = "Eclipse" },
     properties = { tag = tags[1][6] } },
-  { rule = 
+  { rule =
     { class = "SDL_App" }, -- android emulator
     properties = { tag = tags[1][7] } },
-  { rule = 
-    { class = "maple.exe" }, 
+  { rule =
+    { class = "maple.exe" },
     properties = { tag = tags[1][8] } },
-  { rule = 
-    { class = "Otr.py" }, 
+  { rule =
+    { class = "Otr.py" },
     properties = { tag = tags[1][8] } },
-  { rule = 
-    { class = "tvbrowser-TVBrowser" }, 
+  { rule =
+    { class = "tvbrowser-TVBrowser" },
     properties = { tag = tags[1][8] } },
-  { rule = 
-    { class = "Kopete" }, 
+  { rule =
+    { class = "Kopete" },
     properties = { tag = tags[1][9], maximized_vertical = true } },
-  { rule = 
+  { rule =
     { class = "Amarok" },
     properties = { tag = tags[1][9] } },
   { rule =
