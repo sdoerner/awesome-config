@@ -466,6 +466,18 @@ client.add_signal("manage", function (c, startup)
             awful.placement.no_offscreen(c)
         end
     end
+  -- move .tex-edits in vim to tag 7
+  if c.class == "URxvt" then
+    c:add_signal("property::name", function(c,p)
+        local prefix = string.match(c.name,"vim%s(.+)\.tex$")
+        local ctags = c:tags()
+        local isOnRightTag = ctags[1] == tags[1][7]
+        if prefix ~= nil and not isOnRightTag then
+          awful.client.movetotag(tags[1][7],c)
+          awful.tag.viewonly(tags[1][7])
+        end
+        end)
+  end
 end)
 
 client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
@@ -476,20 +488,5 @@ client.add_signal("manage", function(c,b)
      awful.tag.setmwfact(0.4)
   end
 end)
-
--- disabled because property::name does not trigger any events
--- move .tex-edits in vim to tag 7
---function retFunc()
-  --return function(c,p)
-    --prefix = string.match(c.name,"vim%s(.+)\.tex$")
-    --if prefix ~= nil then
-      --awful.client.movetotag(tags[1][7],c)
-      --awful.tag.viewonly(tags[1][7])
-    --end
-  --end
---end
-
---client.add_signal("property::name", retFunc())
---client.add_signal("property::name", function() naughty.notify({ text="mynoti", title="mytitle", timeout=15 }) end)
 
 -- vim: foldmethod=marker:filetype=lua:expandtab:shiftwidth=2:tabstop=2:softtabstop=2:encoding=utf-8:textwidth=80
