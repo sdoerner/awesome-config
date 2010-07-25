@@ -6,6 +6,7 @@ require("awful.rules")
 require("beautiful")
 -- Notification library
 require("naughty")
+require("calendar")
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
@@ -120,6 +121,8 @@ mainmenu = awful.menu.new( { items = {
 -- {{{ Wibox
 -- Create a textclock widget
 mytextclock = awful.widget.textclock({ align = "right" })
+mytextclock:add_signal("mouse::enter", function() calendar.add(0) end)
+mytextclock:add_signal("mouse::leave", calendar.remove)
 
 mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
                                      menu = mainmenu })
