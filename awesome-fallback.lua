@@ -48,9 +48,10 @@ layouts =
 -- {{{ Tags
 -- Define tags table.
 tags = {}
+tagKeys = { 1, 2, 3, 'q', 'w', 'e', 'a', 's', 'd' } -- also used later for keyBinding
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
+    tags[s] = awful.tag(tagKeys, s, layouts[1])
 end
 -- }}}
 
@@ -266,6 +267,37 @@ globalkeys = awful.util.table.join(
             awful.util.eval, nil,
             awful.util.getdir("cache") .. "/history_eval")
         end),
+    --Dynamic tagging (intelligent delete still missing in awesome)
+    awful.key({ modkey, "Shift" }, "n", --move
+      function() awful.tag.move(awful.tag.getidx() - 1) end),
+    awful.key({ modkey, "Shift" }, "m",
+      function() awful.tag.move(awful.tag.getidx() + 1) end),
+    awful.key({ modkey,           }, "i", function() --add
+        local scr = mouse.screen
+        prefix = #screen[scr]:tags() + 1 .. ":"
+        awful.prompt.run(
+            {text = prefix},
+            mypromptbox[mouse.screen].widget,
+            function(name)
+                if name == nil or #name == 0 then return end;
+                awful.tag.viewonly(
+                    awful.tag.add(name,
+                    {screen = mouse.screen,
+                    layout = awful.layout.suit.tile,
+                    mwfact = 0.55}))
+            end)
+        end),
+    awful.key({ modkey,           }, "b", function() --rename
+        local tag = awful.tag.selected(1)
+        local prefix = tag.name
+        awful.prompt.run(
+            {text = prefix},
+            mypromptbox[mouse.screen].widget,
+            function(name)
+                if name == nil or #name == 0 then return end;
+                tag.name = name
+            end)
+        end),
     --My Bindings
     awful.key({ modkey, "Shift" }, "f", function () awful.util.spawn("firefox") end),
     awful.key({ modkey, "Shift" }, "x", function () awful.util.spawn("chromium") end),
@@ -304,8 +336,6 @@ keynumber = 0
 for s = 1, screen.count() do
    keynumber = math.min(9, math.max(#tags[s], keynumber));
 end
-
-tagKeys = { "1", "2", "3", "q", "w", "e", "a", "s", "d" }
 
 -- Bind all key numbers to tags.
 -- Be careful: we use keycodes to make it works on any keyboard layout.
@@ -359,7 +389,10 @@ awful.rules.rules =  {
                      buttons = clientbuttons } },
   { rule = 
     { class = "URxvt" }, 
-    properties = { size_hints_honor = false  } },
+    properties = { tag=tags[1][1], switchtotag = true, size_hints_honor = false } },
+  { rule =
+    { class = "Dolphin" },
+    properties = { tag=tags[1][3], switchtotag = true } },
   { rule = 
     { class = "pinentry" }, 
     properties = { floating = true  } },
@@ -464,6 +497,18 @@ client.add_signal("manage", function (c, startup)
             awful.placement.no_offscreen(c)
         end
     end
+  -- move .tex-edits in vim to tag 7
+  if c.class == "URxvt" then
+    c:add_signal("property::name", function(c,p)
+        local prefix = string.match(c.name,"vim%s(.+)\.tex$")
+        local ctags = c:tags()
+        local isOnRightTag = ctags[1] == tags[1][7]
+        if prefix ~= nil and not isOnRightTag then
+          awful.client.movetotag(tags[1][7],c)
+          awful.tag.viewonly(tags[1][7])
+        end
+        end)
+  end
 end)
 
 client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
@@ -474,20 +519,5 @@ client.add_signal("manage", function(c,b)
      awful.tag.setmwfact(0.4)
   end
 end)
-
--- disabled because property::name does not trigger any events
--- move .tex-edits in vim to tag 7
---function retFunc()
-  --return function(c,p)
-    --prefix = string.match(c.name,"vim%s(.+)\.tex$")
-    --if prefix ~= nil then
-      --awful.client.movetotag(tags[1][7],c)
-      --awful.tag.viewonly(tags[1][7])
-    --end
-  --end
---end
-
---client.add_signal("property::name", retFunc())
---client.add_signal("property::name", function() naughty.notify({ text="mynoti", title="mytitle", timeout=15 }) end)
 
 -- vim: foldmethod=marker:filetype=lua:expandtab:shiftwidth=2:tabstop=2:softtabstop=2:encoding=utf-8:textwidth=80
