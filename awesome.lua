@@ -394,6 +394,9 @@ awful.rules.rules =  {
     { class = "URxvt" }, 
     properties = { tag=tags[1][1], switchtotag = true, size_hints_honor = false } },
   { rule =
+    { class = "Gitk" },
+    properties = { maximized_horizontal = true, maximized_vertical = true } },
+  { rule =
     { class = "Dolphin" },
     properties = { tag=tags[1][3], switchtotag = true } },
   { rule = 
