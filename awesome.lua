@@ -48,9 +48,10 @@ layouts =
 -- {{{ Tags
 -- Define tags table.
 tags = {}
+tagKeys = { 1, 2, 3, 'q', 'w', 'e', 'a', 's', 'd' } -- also used later for keyBinding
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
+    tags[s] = awful.tag(tagKeys, s, layouts[1])
 end
 -- }}}
 
@@ -304,8 +305,6 @@ keynumber = 0
 for s = 1, screen.count() do
    keynumber = math.min(9, math.max(#tags[s], keynumber));
 end
-
-tagKeys = { "1", "2", "3", "q", "w", "e", "a", "s", "d" }
 
 -- Bind all key numbers to tags.
 -- Be careful: we use keycodes to make it works on any keyboard layout.
