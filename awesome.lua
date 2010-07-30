@@ -412,6 +412,9 @@ awful.rules.rules =  {
     { class = "Download" },
     properties = { floating = true  } },
   { rule =
+    { class = "Choqok" },
+    properties = { tag=tags[1][9], floating = true  } },
+  { rule =
     { class = "Skype" },
     properties = { floating = true  } },
   { rule =
