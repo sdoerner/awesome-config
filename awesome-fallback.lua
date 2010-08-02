@@ -6,6 +6,7 @@ require("awful.rules")
 require("beautiful")
 -- Notification library
 require("naughty")
+require("calendar")
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
@@ -77,7 +78,7 @@ officemenu =
   { "Maple 11", "env WINEPREFIX='/home/sdoerner/.wine' wine 'C:\\Programme\\Maple 11\\bin.win\\maplew.exe'" }
 }
 
-graphicsmenu = 
+graphicsmenu =
 {
   { "Gwenview", "gwenview", "/usr/share/icons/hicolor/16x16/apps/gwenview.png" },
   { "GIMP", "gimp", "/usr/share/icons/hicolor/16x16/apps/gimp.png" },
@@ -102,7 +103,7 @@ awesomemenu = {
    { "quit", awesome.quit }
 }
 
-mainmenu = awful.menu.new( { items = { 
+mainmenu = awful.menu.new( { items = {
     { "Grafik", graphicsmenu, "/usr/share/icons/gnome/16x16/categories/applications-graphics.png" },
     { "Multimedia", multimediamenu , "/usr/share/icons/hicolor/16x16/apps/amarok.png" },
     { "Netzwerk", networkmenu,"/usr/share/icons/gnome/16x16/categories/applications-internet.png" },
@@ -120,6 +121,8 @@ mainmenu = awful.menu.new( { items = {
 -- {{{ Wibox
 -- Create a textclock widget
 mytextclock = awful.widget.textclock({ align = "right" })
+mytextclock:add_signal("mouse::enter", function() calendar.add(0) end)
+mytextclock:add_signal("mouse::leave", calendar.remove)
 
 mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
                                      menu = mainmenu })
@@ -149,10 +152,10 @@ mytasklist.buttons = awful.util.table.join(
                                           client.focus = c
                                           c:raise()
                                       end),
-                       awful.button({ }, 3, function () 
+                       awful.button({ }, 3, function ()
                                               if instance then
                                                 instance:hide()
-                                              end 
+                                              end
                                               instance = awful.menu.clients({ width=250 }) end),
                        awful.button({ }, 4, function ()
                                           awful.client.focus.byidx(1)
@@ -166,7 +169,7 @@ mytasklist.buttons = awful.util.table.join(
 
 for s = 1, screen.count() do
     -- Create a promptbox for each screen
-    mypromptbox[s] = awful.widget.prompt({ layout = awful.widget.layout.horizontal.leftright })
+    mypromptbox[s] = awful.widget.prompt()
     -- Create an imagebox widget which will contains an icon indicating which layout we're using.
     -- We need one layoutbox per screen.
     mylayoutbox[s] = awful.widget.layoutbox(s)
@@ -177,29 +180,32 @@ for s = 1, screen.count() do
                awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end)
               ))
     -- Create a taglist widget
-    mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.label.all, mytaglist.buttons)
+    mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, mytaglist.buttons)
 
     -- Create a tasklist widget
-    mytasklist[s] = awful.widget.tasklist(function(c)
-                           return awful.widget.tasklist.label.currenttags(c, s)
-                           end, mytasklist.buttons)
+    mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist.buttons)
 
     -- Create the wibox
     mywibox[s] = awful.wibox({ position = "top", screen = s })
+
+    -- Create a table with widgets that go to the right
+    right_aligned = {
+      layout = awful.widget.layout.horizontal.rightleft
+    }
+    table.insert(right_aligned, mytextclock)
+    if s == 1 then table.insert(right_aligned, mysystray) end
+    table.insert(right_aligned, mylayoutbox[s])
+
     -- Add widgets to the wibox - order matters
     mywibox[s].widgets =
     {
-      {
-        mylauncher,
-        mytaglist[s],
-        mypromptbox[s],
-        layout = awful.widget.layout.horizontal.leftright
-      },
-      mylayoutbox[s],
-      s == 1 and mysystray or nil,
-      mytextclock,
+      mylauncher,
+      mytaglist[s],
+      mypromptbox[s],
+      right_aligned,
       mytasklist[s],
-      layout = awful.widget.layout.horizontal.rightleft
+      layout = awful.widget.layout.horizontal.leftright,
+      height = mywibox[s].height
     }
 end
 -- }}}
@@ -317,7 +323,6 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
     awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
-    awful.key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
     awful.key({ modkey,           }, "n",      function (c) c.minimized = not c.minimized    end),
     awful.key({ modkey }, "t", awful.client.togglemarked),
     awful.key({ modkey }, "F10",
@@ -379,7 +384,7 @@ clientbuttons = awful.util.table.join(
     awful.button({ modkey }, 3, awful.mouse.client.resize))
 -- }}}
 
--- {{{ Rules 
+-- {{{ Rules
 awful.rules.rules =  {
     { rule = { },
       properties = { border_width = beautiful.border_width,
@@ -387,82 +392,88 @@ awful.rules.rules =  {
                      focus = true,
                      keys = clientkeys,
                      buttons = clientbuttons } },
-  { rule = 
-    { class = "URxvt" }, 
+  { rule =
+    { class = "URxvt" },
     properties = { tag=tags[1][1], switchtotag = true, size_hints_honor = false } },
+  { rule =
+    { class = "Gitk" },
+    properties = { maximized_horizontal = true, maximized_vertical = true } },
   { rule =
     { class = "Dolphin" },
     properties = { tag=tags[1][3], switchtotag = true } },
-  { rule = 
-    { class = "pinentry" }, 
+  { rule =
+    { class = "pinentry" },
     properties = { floating = true  } },
-  { rule = 
-    { class = "nepomukservicestub" }, 
+  { rule =
+    { class = "nepomukservicestub" },
     properties = { floating = true  } },
-  { rule = 
-    { class = "gimp" }, 
+  { rule =
+    { class = "Gimp-2.6" },
+    properties = { tag=tags[1][5]  } },
+  { rule =
+    { class = "Download" },
     properties = { floating = true  } },
-  { rule = 
-    { class = "Download" }, 
-    properties = { floating = true  } },
-  { rule = 
+  { rule =
+    { class = "Choqok" },
+    properties = { tag=tags[1][9], floating = true  } },
+  { rule =
     { class = "Skype" },
     properties = { floating = true  } },
-  { rule = 
+  { rule =
     { class = "kio_uiserver" }, --KDE copy window
     properties = { floating = true  } },
-  { rule = 
-    { class = "otrdecoder-gui" }, 
+  { rule =
+    { class = "otrdecoder-gui" },
     properties = { floating = true  } },
-  { rule = 
-    { instance = "Extension" }, 
+  { rule =
+    { instance = "Extension" },
     properties = { floating = true  } },
-  { rule = 
-    { instance = "Places" }, 
+  { rule =
+    { instance = "Places" },
     properties = { floating = true  } },
-  { rule = 
-    { instance = "Plasma" }, 
+  { rule =
+    { instance = "Plasma" },
     properties = { floating = true  } },
-  { rule = 
-    { instance = "kcalc" }, 
+  { rule =
+    { instance = "kcalc" },
     properties = { floating = true  } },
-  { rule = 
-    { instance = "kmix" }, 
+  { rule =
+    { instance = "kmix" },
     properties = { floating = true  } },
-  { rule = 
-    { class = "Firefox" }, 
+  { rule =
+    { class = "Firefox" },
     properties = { tag = tags[1][2] } },
-  { rule = 
+  { rule =
     { class = "Chrome" },
     properties = { tag = tags[1][2] } },
   { rule =
-    { class = "Thunderbird" }, 
+    { class = "Thunderbird" },
     properties = { tag = tags[1][4] } },
-  { rule = 
-    { class = "OpenOffice.org 3.2" }, 
+  { rule =
+    { class = "OpenOffice.org 3.2" },
     properties = { tag = tags[1][5] } },
-  { rule = 
-    { class = "Kdevelop.bin" }, 
+  { rule =
+    { class = "Kdevelop.bin" },
     properties = { tag = tags[1][6] } },
-  { rule = 
-    { class = "Eclipse" }, 
+  { rule =
+    { class = "Eclipse" },
     properties = { tag = tags[1][6] } },
-  { rule = 
+  { rule =
     { class = "SDL_App" }, -- android emulator
     properties = { tag = tags[1][7] } },
-  { rule = 
-    { class = "maple.exe" }, 
+  { rule =
+    { class = "maple.exe" },
     properties = { tag = tags[1][8] } },
-  { rule = 
-    { class = "Otr.py" }, 
+  { rule =
+    { class = "Otr.py" },
     properties = { tag = tags[1][8] } },
-  { rule = 
-    { class = "tvbrowser-TVBrowser" }, 
+  { rule =
+    { class = "tvbrowser-TVBrowser" },
     properties = { tag = tags[1][8] } },
-  { rule = 
-    { class = "Kopete" }, 
+  { rule =
+    { class = "Kopete" },
     properties = { tag = tags[1][9], maximized_vertical = true } },
-  { rule = 
+  { rule =
     { class = "Amarok" },
     properties = { tag = tags[1][9] } },
   { rule =

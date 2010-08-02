@@ -169,7 +169,7 @@ mytasklist.buttons = awful.util.table.join(
 
 for s = 1, screen.count() do
     -- Create a promptbox for each screen
-    mypromptbox[s] = awful.widget.prompt({ layout = awful.widget.layout.horizontal.leftright })
+    mypromptbox[s] = awful.widget.prompt()
     -- Create an imagebox widget which will contains an icon indicating which layout we're using.
     -- We need one layoutbox per screen.
     mylayoutbox[s] = awful.widget.layoutbox(s)
@@ -180,29 +180,32 @@ for s = 1, screen.count() do
                awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end)
               ))
     -- Create a taglist widget
-    mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.label.all, mytaglist.buttons)
+    mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, mytaglist.buttons)
 
     -- Create a tasklist widget
-    mytasklist[s] = awful.widget.tasklist(function(c)
-                           return awful.widget.tasklist.label.currenttags(c, s)
-                           end, mytasklist.buttons)
+    mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist.buttons)
 
     -- Create the wibox
     mywibox[s] = awful.wibox({ position = "top", screen = s })
+
+    -- Create a table with widgets that go to the right
+    right_aligned = {
+      layout = awful.widget.layout.horizontal.rightleft
+    }
+    table.insert(right_aligned, mytextclock)
+    if s == 1 then table.insert(right_aligned, mysystray) end
+    table.insert(right_aligned, mylayoutbox[s])
+
     -- Add widgets to the wibox - order matters
     mywibox[s].widgets =
     {
-      {
-        mylauncher,
-        mytaglist[s],
-        mypromptbox[s],
-        layout = awful.widget.layout.horizontal.leftright
-      },
-      mylayoutbox[s],
-      s == 1 and mysystray or nil,
-      mytextclock,
+      mylauncher,
+      mytaglist[s],
+      mypromptbox[s],
+      right_aligned,
       mytasklist[s],
-      layout = awful.widget.layout.horizontal.rightleft
+      layout = awful.widget.layout.horizontal.leftright,
+      height = mywibox[s].height
     }
 end
 -- }}}
@@ -320,7 +323,6 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
     awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
-    awful.key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
     awful.key({ modkey,           }, "n",      function (c) c.minimized = not c.minimized    end),
     awful.key({ modkey }, "t", awful.client.togglemarked),
     awful.key({ modkey }, "F10",
