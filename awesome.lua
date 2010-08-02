@@ -273,7 +273,7 @@ globalkeys = awful.util.table.join(
             awful.util.eval, nil,
             awful.util.getdir("cache") .. "/history_eval")
         end),
-    --Dynamic tagging (intelligent delete still missing in awesome)
+    --Dynamic tagging
     awful.key({ modkey, "Shift" }, "n", --move
       function() awful.tag.move(awful.tag.getidx() - 1) end),
     awful.key({ modkey, "Shift" }, "m",
@@ -293,6 +293,16 @@ globalkeys = awful.util.table.join(
                     mwfact = 0.55}))
             end)
         end),
+    awful.key({ modkey, "Shift" }, "o", function() --delete
+      local t = awful.tag.selected(1)
+      for _,v in ipairs(tags[1]) do
+        if v == t then
+        -- don't allow deletion of standard tags, as this destroys the key mappings
+          return
+        end
+      end
+      awful.tag.delete(t, tags[1][1])
+    end),
     awful.key({ modkey,           }, "b", function() --rename
         local tag = awful.tag.selected(1)
         local prefix = tag.name
@@ -311,7 +321,6 @@ globalkeys = awful.util.table.join(
     --awful.key({ modkey, "Shift" }, "a", function () awful.util.spawn("amarok") end),
     awful.key({ modkey, "Shift" }, "i", function () awful.util.spawn("kopete") end),
     --awful.key({ modkey, "Shift" }, "e", function () awful.util.spawn("eclipse-3.5 -nosplash") end),
-    awful.key({ modkey, "Shift" }, "o", function () awful.util.spawn("oowriter") end),
     awful.key({ modkey,  }, "F12", function () awful.util.spawn("/home/sdoerner/bin/xpop") end),
     awful.key({ modkey, "Shift" }, "b", function () awful.util.spawn(filemanager) end)
 )
