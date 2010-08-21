@@ -2,6 +2,7 @@
 require("awful")
 require("awful.autofocus")
 require("awful.rules")
+require("awful.widget.progressbar")
 -- Theme handling library
 require("beautiful")
 -- Notification library
@@ -10,7 +11,8 @@ require("calendar")
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
-theme_path = "/usr/share/awesome/themes/default/theme.lua"
+theme_path = "/home/sdoerner/.config/awesome/theme.lua"
+
 -- Actually load theme
 beautiful.init(theme_path)
 
@@ -18,8 +20,7 @@ beautiful.init(theme_path)
 terminal = "urxvt"
 editor = "vim"
 editor_cmd = terminal .. " -e " .. editor
-filemanager = "dolphin"
-filemanager_logo = "/usr/share/icons/oxygen/16x16/actions/view-list-icons.png"
+filemanager = "pcmanfm"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -105,15 +106,17 @@ mainmenu = awful.menu.new( { items = {
     { "Office", officemenu, "/usr/share/icons/hicolor/16x16/apps/libreoffice-writer.png" },
     { "Eclipse", "eclipse-3.5 -nosplash","/usr/lib/eclipse-3.5/icon.xpm" },
     { "awesome", awesomemenu, beautiful.awesome_icon },
-    { "Taskmanager", "/usr/bin/ksysguard", "/usr/share/icons/oxygen/16x16/apps/computer.png" },
     { "Kcalc", "kcalc" , "/usr/share/icons/oxygen/22x22/apps/accessories-calculator.png" },
-    { "Files", filemanager, filemanager_logo },
+    { "Files", filemanager },
     { "open terminal", terminal }
     } })
 
 -- }}}
 
 -- {{{ Wibox
+-- create a battery box
+mybatterybox = widget({ type = "textbox" })
+
 -- Create a textclock widget
 mytextclock = awful.widget.textclock({ align = "right" })
 mytextclock:add_signal("mouse::enter", function() calendar.add(0) end)
@@ -161,6 +164,14 @@ mytasklist.buttons = awful.util.table.join(
                                           if client.focus then client.focus:raise() end
                                       end)
                       )
+volumewidget = awful.widget.progressbar()
+  volumewidget:set_width(25)
+  volumewidget:set_height(10)
+  volumewidget:set_vertical(false)
+  volumewidget:set_background_color('black')
+  volumewidget:set_color('#ffff00ff')
+  volumewidget:set_max_value(100)
+  volumewidget:set_value(50)
 
 for s = 1, screen.count() do
     -- Create a promptbox for each screen
@@ -200,6 +211,11 @@ for s = 1, screen.count() do
       mytaglist[s],
       mypromptbox[s],
       right_aligned,
+      mylayoutbox[s],
+      s == 1 and mysystray or nil,
+      s == 1 and mybatterybox or nil,
+      mytextclock,
+      s == 1 and volumewidget.widget or nil,
       mytasklist[s],
       layout = awful.widget.layout.horizontal.leftright,
       height = mywibox[s].height
@@ -217,6 +233,18 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
+    awful.key({}, "XF86PowerOff", function ()
+               awful.util.spawn("sudo /sbin/halt")
+               end),
+    awful.key({}, "XF86Launch1", function ()
+               awful.util.spawn("sudo /usr/local/sbin/backlight.sh toggle")
+               end),
+    awful.key({}, "XF86MonBrightnessDown", function ()
+               awful.util.spawn("sudo /usr/local/sbin/backlight.sh down")
+               end),
+    awful.key({}, "XF86MonBrightnessUp", function ()
+               awful.util.spawn("sudo /usr/local/sbin/backlight.sh up")
+               end),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
@@ -314,14 +342,23 @@ globalkeys = awful.util.table.join(
        [    end),
        ]]
     --My Bindings
+    awful.key({ modkey }, "F12", function () awful.util.spawn("slock") end),
     awful.key({ modkey, "Shift" }, "f", function () awful.util.spawn("firefox") end),
     awful.key({ modkey, "Shift" }, "x", function () awful.util.spawn("chromium") end),
     awful.key({ modkey, "Shift" }, "t", function () awful.util.spawn("thunderbird") end),
     --awful.key({ modkey, "Shift" }, "a", function () awful.util.spawn("amarok") end),
     awful.key({ modkey, "Shift" }, "i", function () awful.util.spawn("kopete") end),
     --awful.key({ modkey, "Shift" }, "e", function () awful.util.spawn("eclipse-3.5 -nosplash") end),
-    awful.key({ modkey,  }, "F12", function () awful.util.spawn("/home/sdoerner/bin/xpop") end),
-    awful.key({ modkey, "Shift" }, "b", function () awful.util.spawn(filemanager) end)
+    awful.key({ modkey, "Shift" }, "o", function () awful.util.spawn("oowriter") end),
+    awful.key({ modkey, "Shift" }, "b", function () awful.util.spawn(filemanager) end),
+  awful.key({} ,"XF86AudioLowerVolume", function()
+  awful.util.spawn("amixer -c 0 set Master 5%-")
+  get_vol()
+  end),
+  awful.key({} ,"XF86AudioRaiseVolume", function()
+  awful.util.spawn("amixer -c 0 set Master 5%+")
+  get_vol()
+  end)
 )
 
 -- Client awful tagging: this is useful to tag some clients and then do stuff like move to tag on them
@@ -401,9 +438,6 @@ awful.rules.rules =  {
                      keys = clientkeys,
                      buttons = clientbuttons } },
   { rule =
-    { class = "Plasma" },
-    properties = { floating = true } },
-  { rule =
     { class = "URxvt" },
     properties = { tag=tags[1][1], switchtotag = true, size_hints_honor = false } },
   { rule =
@@ -413,20 +447,8 @@ awful.rules.rules =  {
     { class = "Dolphin" },
     properties = { tag=tags[1][3], switchtotag = true } },
   { rule =
-    { class = "Konversation" },
-    properties = { tag=tags[1][8]} },
-  { rule =
-    { class = "Quasselclient" },
-    properties = { tag=tags[1][8]} },
-  { rule =
-    { name = "Ordnererstellung" },
-    properties = { floating = true, tag=tags[1][3], switchtotag = true } },
-  { rule =
-    { name = "Verschiebevorgang" },
-    properties = { floating = true, tag=tags[1][3], switchtotag = true } },
-  { rule =
-    { name = "Kopiervorgang" },
-    properties = { floating = true, tag=tags[1][3], switchtotag = true } },
+    { class = "Pcmanfm" },
+    properties = { tag=tags[1][3], switchtotag = true } },
   { rule =
     { class = "pinentry" },
     properties = { floating = true  } },
@@ -560,4 +582,50 @@ client.add_signal("manage", function(c,b)
   end
 end)
 
--- vim: foldmethod=marker:filetype=lua:expandtab:shiftwidth=2:tabstop=2:softtabstop=2:textwidth=80
+function get_vol()
+  local vol = awful.util.pread('amixer -c 0 get Master | grep % | cut -d "[" -f2  | cut -d "%" -f1')
+  volumewidget:set_value(vol)
+end
+
+get_vol()
+
+function battery()
+  -- file containing all battery-related information we need
+  FILE = '/sys/class/power_supply/BAT1/uevent'
+  -- read file
+  local file = io.open(FILE, 'r')
+  if file == nil then
+    return "AC"
+  end
+  local data = file:read('*all')
+  file:close()
+  -- extract information from read file
+  local status = data:match("POWER_SUPPLY_STATUS=(%a+)")
+  local now = tonumber(data:match("POWER_SUPPLY_CHARGE_NOW=(%d+)"))
+  local full = tonumber(data:match("POWER_SUPPLY_CHARGE_FULL=(%d+)"))
+
+  --distinguish status
+  if status == "Full" then
+    out = "AC"
+  elseif status == "Discharging" then
+    out = "D"
+  elseif status == "Charging" then
+    out = "C"
+  else
+    out = status
+  end
+  out = out .." : "
+
+  -- get the percentage and format the output
+  local percent = now / full * 100
+  percentf = string.format('%.0f', percent)
+  out = out .. percentf ..'%'
+  return out
+  end
+  
+  mytimer = timer({ timeout = 60 })
+  mytimer:add_signal("timeout", function() mybatterybox.text = " | " .. battery() end)
+  mytimer:start()
+
+
+-- vim: foldmethod=marker:filetype=lua:expandtab:shiftwidth=2:tabstop=2:softtabstop=2:encoding=utf-8:textwidth=80
