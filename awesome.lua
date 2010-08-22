@@ -417,7 +417,7 @@ awful.rules.rules =  {
     { class = "nepomukservicestub" },
     properties = { floating = true  } },
   { rule =
-    { class = "Gimp-2.6" },
+    { class = "Gimp" },
     properties = { tag=tags[1][5]  } },
   { rule =
     { class = "Download" },
