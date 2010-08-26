@@ -411,6 +411,15 @@ awful.rules.rules =  {
     { class = "Dolphin" },
     properties = { tag=tags[1][3], switchtotag = true } },
   { rule =
+    { name = "Ordnererstellung" },
+    properties = { floating = true, tag=tags[1][3], switchtotag = true } },
+  { rule =
+    { name = "Verschiebevorgang" },
+    properties = { floating = true, tag=tags[1][3], switchtotag = true } },
+  { rule =
+    { name = "Kopiervorgang" },
+    properties = { floating = true, tag=tags[1][3], switchtotag = true } },
+  { rule =
     { class = "pinentry" },
     properties = { floating = true  } },
   { rule =
