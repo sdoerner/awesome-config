@@ -121,8 +121,8 @@ mainmenu = awful.menu.new( { items = {
 -- {{{ Wibox
 -- Create a textclock widget
 mytextclock = awful.widget.textclock({ align = "right" })
-mytextclock:add_signal("mouse::enter", function() calendar.add(0) end)
-mytextclock:add_signal("mouse::leave", calendar.remove)
+mytextclock:connect_signal("mouse::enter", function() calendar.add(0) end)
+mytextclock:connect_signal("mouse::leave", calendar.remove)
 
 mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
                                      menu = mainmenu })
@@ -503,12 +503,12 @@ awful.rules.rules =  {
 
 -- {{{ Signals
 -- Signal function to execute when a new client appears.
-client.add_signal("manage", function (c, startup)
+client.connect_signal("manage", function (c, startup)
     -- Add a titlebar
     -- awful.titlebar.add(c, { modkey = modkey })
 
     -- Enable sloppy focus
-    c:add_signal("mouse::enter", function(c)
+    c:connect_signal("mouse::enter", function(c)
         if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
             and awful.client.focus.filter(c) then
             client.focus = c
@@ -528,7 +528,7 @@ client.add_signal("manage", function (c, startup)
     end
   -- move .tex-edits in vim to tag 7
   if c.class == "URxvt" then
-    c:add_signal("property::name", function(c,p)
+    c:connect_signal("property::name", function(c,p)
         local prefix = string.match(c.name,"vim%s(.+)\.tex$")
         local ctags = c:tags()
         local isOnRightTag = ctags[1] == tags[1][7]
@@ -540,9 +540,9 @@ client.add_signal("manage", function (c, startup)
   end
 end)
 
-client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
-client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
-client.add_signal("manage", function(c,b)
+client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
+client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+client.connect_signal("manage", function(c,b)
   if string.match(c.class, "[oO]kular") then
      awful.client.setslave(c)
      awful.tag.setmwfact(0.4)
