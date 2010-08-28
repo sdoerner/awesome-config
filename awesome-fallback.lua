@@ -61,11 +61,9 @@ end
 networkmenu =
 {
   { "Firefox", "firefox", "/usr/lib/mozilla-firefox/chrome/icons/default/default16.png" },
-  { "Chromium", "chromium", "/usr/share/pixmaps/chromium-browser.png" },
   { "Thunderbird", "thunderbird", "/usr/share/pixmaps/thunderbird-icon.png" },
   { "Kopete", "kopete", "/usr/share/icons/hicolor/16x16/apps/kopete.png" },
-  { "VNC Viewer", "vncviewer", "/usr/share/pixmaps/vncviewer.png" },
-  { "Gobby", "gobby","/usr/share/pixmaps/gobby.png" }
+  { "VNC Viewer", "vncviewer", "/usr/share/pixmaps/vncviewer.png" }
 }
 
 officemenu =
@@ -82,16 +80,13 @@ graphicsmenu =
 {
   { "Gwenview", "gwenview", "/usr/share/icons/hicolor/16x16/apps/gwenview.png" },
   { "GIMP", "gimp", "/usr/share/icons/hicolor/16x16/apps/gimp.png" },
-  { "Inkscape", "inkscape", "/usr/share/pixmaps/inkscape.png" },
   { "OO Draw", "oodraw", "/usr/share/pixmaps/ooo-draw.png" },
   { "Okular", "okular", "/usr/share/icons/hicolor/16x16/apps/okular.png" },
-  { "Blender", "blender" }
 }
 
 multimediamenu =
 {
   { "Amarok", "amarok", "/usr/share/icons/hicolor/16x16/apps/amarok.png" },
-  { "KID3", "kid3", "/usr/share/icons/hicolor/16x16/apps/kid3.png" },
   { "VLC", "vlc", "/usr/share/icons/hicolor/16x16/apps/vlc.png" },
   { "KSnapShot", "ksnapshot", "/usr/share/icons/hicolor/16x16/apps/ksnapshot.png" },
 }
@@ -121,8 +116,8 @@ mainmenu = awful.menu.new( { items = {
 -- {{{ Wibox
 -- Create a textclock widget
 mytextclock = awful.widget.textclock({ align = "right" })
-mytextclock:add_signal("mouse::enter", function() calendar.add(0) end)
-mytextclock:add_signal("mouse::leave", calendar.remove)
+mytextclock:connect_signal("mouse::enter", function() calendar.add(0) end)
+mytextclock:connect_signal("mouse::leave", calendar.remove)
 
 mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
                                      menu = mainmenu })
@@ -273,7 +268,7 @@ globalkeys = awful.util.table.join(
             awful.util.eval, nil,
             awful.util.getdir("cache") .. "/history_eval")
         end),
-    --Dynamic tagging (intelligent delete still missing in awesome)
+    --Dynamic tagging
     awful.key({ modkey, "Shift" }, "n", --move
       function() awful.tag.move(awful.tag.getidx() - 1) end),
     awful.key({ modkey, "Shift" }, "m",
@@ -293,6 +288,16 @@ globalkeys = awful.util.table.join(
                     mwfact = 0.55}))
             end)
         end),
+    awful.key({ modkey, "Shift" }, "o", function() --delete
+      local t = awful.tag.selected(1)
+      for _,v in ipairs(tags[1]) do
+        if v == t then
+        -- don't allow deletion of standard tags, as this destroys the key mappings
+          return
+        end
+      end
+      awful.tag.delete(t, tags[1][1])
+    end),
     awful.key({ modkey,           }, "b", function() --rename
         local tag = awful.tag.selected(1)
         local prefix = tag.name
@@ -311,7 +316,6 @@ globalkeys = awful.util.table.join(
     --awful.key({ modkey, "Shift" }, "a", function () awful.util.spawn("amarok") end),
     awful.key({ modkey, "Shift" }, "i", function () awful.util.spawn("kopete") end),
     --awful.key({ modkey, "Shift" }, "e", function () awful.util.spawn("eclipse-3.5 -nosplash") end),
-    awful.key({ modkey, "Shift" }, "o", function () awful.util.spawn("oowriter") end),
     awful.key({ modkey,  }, "F12", function () awful.util.spawn("/home/sdoerner/bin/xpop") end),
     awful.key({ modkey, "Shift" }, "b", function () awful.util.spawn(filemanager) end)
 )
@@ -402,13 +406,22 @@ awful.rules.rules =  {
     { class = "Dolphin" },
     properties = { tag=tags[1][3], switchtotag = true } },
   { rule =
+    { name = "Ordnererstellung" },
+    properties = { floating = true, tag=tags[1][3], switchtotag = true } },
+  { rule =
+    { name = "Verschiebevorgang" },
+    properties = { floating = true, tag=tags[1][3], switchtotag = true } },
+  { rule =
+    { name = "Kopiervorgang" },
+    properties = { floating = true, tag=tags[1][3], switchtotag = true } },
+  { rule =
     { class = "pinentry" },
     properties = { floating = true  } },
   { rule =
     { class = "nepomukservicestub" },
     properties = { floating = true  } },
   { rule =
-    { class = "Gimp-2.6" },
+    { class = "Gimp" },
     properties = { tag=tags[1][5]  } },
   { rule =
     { class = "Download" },
@@ -485,12 +498,12 @@ awful.rules.rules =  {
 
 -- {{{ Signals
 -- Signal function to execute when a new client appears.
-client.add_signal("manage", function (c, startup)
+client.connect_signal("manage", function (c, startup)
     -- Add a titlebar
     -- awful.titlebar.add(c, { modkey = modkey })
 
     -- Enable sloppy focus
-    c:add_signal("mouse::enter", function(c)
+    c:connect_signal("mouse::enter", function(c)
         if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
             and awful.client.focus.filter(c) then
             client.focus = c
@@ -510,7 +523,7 @@ client.add_signal("manage", function (c, startup)
     end
   -- move .tex-edits in vim to tag 7
   if c.class == "URxvt" then
-    c:add_signal("property::name", function(c,p)
+    c:connect_signal("property::name", function(c,p)
         local prefix = string.match(c.name,"vim%s(.+)\.tex$")
         local ctags = c:tags()
         local isOnRightTag = ctags[1] == tags[1][7]
@@ -522,9 +535,9 @@ client.add_signal("manage", function (c, startup)
   end
 end)
 
-client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
-client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
-client.add_signal("manage", function(c,b)
+client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
+client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+client.connect_signal("manage", function(c,b)
   if string.match(c.class, "[oO]kular") then
      awful.client.setslave(c)
      awful.tag.setmwfact(0.4)

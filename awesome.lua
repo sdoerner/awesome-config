@@ -61,11 +61,9 @@ end
 networkmenu =
 {
   { "Firefox", "firefox", "/usr/lib/mozilla-firefox/chrome/icons/default/default16.png" },
-  { "Chromium", "chromium", "/usr/share/pixmaps/chromium-browser.png" },
   { "Thunderbird", "thunderbird", "/usr/share/pixmaps/thunderbird-icon.png" },
   { "Kopete", "kopete", "/usr/share/icons/hicolor/16x16/apps/kopete.png" },
-  { "VNC Viewer", "vncviewer", "/usr/share/pixmaps/vncviewer.png" },
-  { "Gobby", "gobby","/usr/share/pixmaps/gobby.png" }
+  { "VNC Viewer", "vncviewer", "/usr/share/pixmaps/vncviewer.png" }
 }
 
 officemenu =
@@ -82,16 +80,13 @@ graphicsmenu =
 {
   { "Gwenview", "gwenview", "/usr/share/icons/hicolor/16x16/apps/gwenview.png" },
   { "GIMP", "gimp", "/usr/share/icons/hicolor/16x16/apps/gimp.png" },
-  { "Inkscape", "inkscape", "/usr/share/pixmaps/inkscape.png" },
   { "OO Draw", "oodraw", "/usr/share/pixmaps/ooo-draw.png" },
   { "Okular", "okular", "/usr/share/icons/hicolor/16x16/apps/okular.png" },
-  { "Blender", "blender" }
 }
 
 multimediamenu =
 {
   { "Amarok", "amarok", "/usr/share/icons/hicolor/16x16/apps/amarok.png" },
-  { "KID3", "kid3", "/usr/share/icons/hicolor/16x16/apps/kid3.png" },
   { "VLC", "vlc", "/usr/share/icons/hicolor/16x16/apps/vlc.png" },
   { "KSnapShot", "ksnapshot", "/usr/share/icons/hicolor/16x16/apps/ksnapshot.png" },
 }
