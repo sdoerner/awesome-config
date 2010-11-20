@@ -436,7 +436,7 @@ awful.rules.rules =  {
     { class = "kio_uiserver" }, --KDE copy window
     properties = { floating = true  } },
   { rule =
-    { class = "otrdecoder-gui" },
+    { class = "Otrdecoder-gui" },
     properties = { floating = true  } },
   { rule =
     { instance = "Extension" },
