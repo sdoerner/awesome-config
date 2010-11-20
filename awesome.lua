@@ -397,6 +397,9 @@ awful.rules.rules =  {
                      keys = clientkeys,
                      buttons = clientbuttons } },
   { rule =
+    { class = "Plasma" },
+    properties = { floating = true } },
+  { rule =
     { class = "URxvt" },
     properties = { tag=tags[1][1], switchtotag = true, size_hints_honor = false } },
   { rule =
