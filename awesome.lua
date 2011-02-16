@@ -271,46 +271,48 @@ globalkeys = awful.util.table.join(
             awful.util.getdir("cache") .. "/history_eval")
         end),
     --Dynamic tagging
-    awful.key({ modkey, "Shift" }, "n", --move
-      function() awful.tag.move(awful.tag.getidx() - 1) end),
-    awful.key({ modkey, "Shift" }, "m",
-      function() awful.tag.move(awful.tag.getidx() + 1) end),
-    awful.key({ modkey,           }, "i", function() --add
-        local scr = mouse.screen
-        prefix = #screen[scr]:tags() + 1 .. ":"
-        awful.prompt.run(
-            {text = prefix},
-            mypromptbox[mouse.screen].widget,
-            function(name)
-                if name == nil or #name == 0 then return end;
-                awful.tag.viewonly(
-                    awful.tag.add(name,
-                    {screen = mouse.screen,
-                    layout = awful.layout.suit.tile,
-                    mwfact = 0.55}))
-            end)
-        end),
-    awful.key({ modkey, "Shift" }, "o", function() --delete
-      local t = awful.tag.selected(1)
-      for _,v in ipairs(tags[1]) do
-        if v == t then
-        -- don't allow deletion of standard tags, as this destroys the key mappings
-          return
-        end
-      end
-      awful.tag.delete(t, tags[1][1])
-    end),
-    awful.key({ modkey,           }, "b", function() --rename
-        local tag = awful.tag.selected(1)
-        local prefix = tag.name
-        awful.prompt.run(
-            {text = prefix},
-            mypromptbox[mouse.screen].widget,
-            function(name)
-                if name == nil or #name == 0 then return end;
-                tag.name = name
-            end)
-        end),
+    --[[
+       [awful.key({ modkey, "Shift" }, "n", --move
+       [  function() awful.tag.move(awful.tag.getidx() - 1) end),
+       [awful.key({ modkey, "Shift" }, "m",
+       [  function() awful.tag.move(awful.tag.getidx() + 1) end),
+       [awful.key({ modkey,           }, "i", function() --add
+       [    local scr = mouse.screen
+       [    prefix = #screen[scr]:tags() + 1 .. ":"
+       [    awful.prompt.run(
+       [        {text = prefix},
+       [        mypromptbox[mouse.screen].widget,
+       [        function(name)
+       [            if name == nil or #name == 0 then return end;
+       [            awful.tag.viewonly(
+       [                awful.tag.add(name,
+       [                {screen = mouse.screen,
+       [                layout = awful.layout.suit.tile,
+       [                mwfact = 0.55}))
+       [        end)
+       [    end),
+       [awful.key({ modkey, "Shift" }, "o", function() --delete
+       [  local t = awful.tag.selected(1)
+       [  for _,v in ipairs(tags[1]) do
+       [    if v == t then
+       [    -- don't allow deletion of standard tags, as this destroys the key mappings
+       [      return
+       [    end
+       [  end
+       [  awful.tag.delete(t, tags[1][1])
+       [end),
+       [awful.key({ modkey,           }, "b", function() --rename
+       [    local tag = awful.tag.selected(1)
+       [    local prefix = tag.name
+       [    awful.prompt.run(
+       [        {text = prefix},
+       [        mypromptbox[mouse.screen].widget,
+       [        function(name)
+       [            if name == nil or #name == 0 then return end;
+       [            tag.name = name
+       [        end)
+       [    end),
+       ]]
     --My Bindings
     awful.key({ modkey, "Shift" }, "f", function () awful.util.spawn("firefox") end),
     awful.key({ modkey, "Shift" }, "x", function () awful.util.spawn("chromium") end),
