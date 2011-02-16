@@ -413,6 +413,12 @@ awful.rules.rules =  {
     { class = "Dolphin" },
     properties = { tag=tags[1][3], switchtotag = true } },
   { rule =
+    { class = "Konversation" },
+    properties = { tag=tags[1][8]} },
+  { rule =
+    { class = "Quasselclient" },
+    properties = { tag=tags[1][8]} },
+  { rule =
     { name = "Ordnererstellung" },
     properties = { floating = true, tag=tags[1][3], switchtotag = true } },
   { rule =
