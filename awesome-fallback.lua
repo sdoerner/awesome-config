@@ -116,8 +116,8 @@ mainmenu = awful.menu.new( { items = {
 -- {{{ Wibox
 -- Create a textclock widget
 mytextclock = awful.widget.textclock({ align = "right" })
-mytextclock:connect_signal("mouse::enter", function() calendar.add(0) end)
-mytextclock:connect_signal("mouse::leave", calendar.remove)
+mytextclock:add_signal("mouse::enter", function() calendar.add(0) end)
+mytextclock:add_signal("mouse::leave", calendar.remove)
 
 mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
                                      menu = mainmenu })
@@ -164,7 +164,7 @@ mytasklist.buttons = awful.util.table.join(
 
 for s = 1, screen.count() do
     -- Create a promptbox for each screen
-    mypromptbox[s] = awful.widget.prompt()
+    mypromptbox[s] = awful.widget.prompt({ layout = awful.widget.layout.horizontal.leftright })
     -- Create an imagebox widget which will contains an icon indicating which layout we're using.
     -- We need one layoutbox per screen.
     mylayoutbox[s] = awful.widget.layoutbox(s)
@@ -175,10 +175,12 @@ for s = 1, screen.count() do
                awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end)
               ))
     -- Create a taglist widget
-    mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, mytaglist.buttons)
+    mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.label.all, mytaglist.buttons)
 
     -- Create a tasklist widget
-    mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist.buttons)
+    mytasklist[s] = awful.widget.tasklist(function(c)
+      return awful.widget.tasklist.label.currenttags(c, s)
+      end, mytasklist.buttons)
 
     -- Create the wibox
     mywibox[s] = awful.wibox({ position = "top", screen = s })
@@ -397,6 +399,9 @@ awful.rules.rules =  {
                      keys = clientkeys,
                      buttons = clientbuttons } },
   { rule =
+    { class = "Plasma" },
+    properties = { floating = true } },
+  { rule =
     { class = "URxvt" },
     properties = { tag=tags[1][1], switchtotag = true, size_hints_honor = false } },
   { rule =
@@ -405,6 +410,12 @@ awful.rules.rules =  {
   { rule =
     { class = "Dolphin" },
     properties = { tag=tags[1][3], switchtotag = true } },
+  { rule =
+    { class = "Konversation" },
+    properties = { tag=tags[1][8]} },
+  { rule =
+    { class = "Quasselclient" },
+    properties = { tag=tags[1][8]} },
   { rule =
     { name = "Ordnererstellung" },
     properties = { floating = true, tag=tags[1][3], switchtotag = true } },
@@ -436,7 +447,7 @@ awful.rules.rules =  {
     { class = "kio_uiserver" }, --KDE copy window
     properties = { floating = true  } },
   { rule =
-    { class = "otrdecoder-gui" },
+    { class = "Otrdecoder-gui" },
     properties = { floating = true  } },
   { rule =
     { instance = "Extension" },
@@ -466,8 +477,11 @@ awful.rules.rules =  {
     { class = "OpenOffice.org 3.2" },
     properties = { tag = tags[1][5] } },
   { rule =
-    { class = "Kdevelop.bin" },
+    { class = "Kdevelop" },
     properties = { tag = tags[1][6] } },
+  { rule =
+    { class = "Assistant" },
+    properties = { tag = tags[1][7] } },
   { rule =
     { class = "Eclipse" },
     properties = { tag = tags[1][6] } },
@@ -498,12 +512,12 @@ awful.rules.rules =  {
 
 -- {{{ Signals
 -- Signal function to execute when a new client appears.
-client.connect_signal("manage", function (c, startup)
+client.add_signal("manage", function (c, startup)
     -- Add a titlebar
     -- awful.titlebar.add(c, { modkey = modkey })
 
     -- Enable sloppy focus
-    c:connect_signal("mouse::enter", function(c)
+    c:add_signal("mouse::enter", function(c)
         if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
             and awful.client.focus.filter(c) then
             client.focus = c
@@ -523,7 +537,7 @@ client.connect_signal("manage", function (c, startup)
     end
   -- move .tex-edits in vim to tag 7
   if c.class == "URxvt" then
-    c:connect_signal("property::name", function(c,p)
+    c:add_signal("property::name", function(c,p)
         local prefix = string.match(c.name,"vim%s(.+)\.tex$")
         local ctags = c:tags()
         local isOnRightTag = ctags[1] == tags[1][7]
@@ -535,13 +549,13 @@ client.connect_signal("manage", function (c, startup)
   end
 end)
 
-client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
-client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
-client.connect_signal("manage", function(c,b)
+client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
+client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+client.add_signal("manage", function(c,b)
   if string.match(c.class, "[oO]kular") then
      awful.client.setslave(c)
      awful.tag.setmwfact(0.4)
   end
 end)
 
--- vim: foldmethod=marker:filetype=lua:expandtab:shiftwidth=2:tabstop=2:softtabstop=2:encoding=utf-8:textwidth=80
+-- vim: foldmethod=marker:filetype=lua:expandtab:shiftwidth=2:tabstop=2:softtabstop=2:textwidth=80
