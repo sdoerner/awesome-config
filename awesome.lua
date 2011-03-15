@@ -70,7 +70,7 @@ networkmenu =
 
 officemenu =
 {
-  { "OO Writer", "oowriter", "/usr/share/pixmaps/ooo-writer.png" },
+  --{ "OO Writer", "oowriter", "/usr/share/pixmaps/ooo-writer.png" },
   { "OO Calc", "oocalc", "/usr/share/pixmaps/ooo-calc.png" },
   { "OO Impress", "ooimpress", "/usr/share/pixmaps/ooo-impress.png" },
   { "OO Base", "oobase", "/usr/share/pixmaps/ooo-base.png" },
@@ -107,7 +107,7 @@ mainmenu = awful.menu.new( { items = {
     { "Grafik", graphicsmenu, "/usr/share/icons/gnome/16x16/categories/applications-graphics.png" },
     { "Multimedia", multimediamenu , "/usr/share/icons/hicolor/16x16/apps/amarok.png" },
     { "Netzwerk", networkmenu,"/usr/share/icons/gnome/16x16/categories/applications-internet.png" },
-    { "Office", officemenu, "/usr/share/pixmaps/ooo-writer.png" },
+    { "Office", officemenu},
     { "Eclipse", "eclipse-3.5 -nosplash","/usr/lib/eclipse-3.5/icon.xpm" },
     { "awesome", awesomemenu, beautiful.awesome_icon },
     { "Taskmanager", "/usr/bin/ksysguard", "/usr/share/icons/oxygen/16x16/apps/computer.png" },
@@ -420,6 +420,9 @@ awful.rules.rules =  {
     { name = "Kopiervorgang" },
     properties = { floating = true, tag=tags[1][3], switchtotag = true } },
   { rule =
+    { class = "Plasma-desktop" },
+    properties = { floating = true  } },
+  { rule =
     { class = "pinentry" },
     properties = { floating = true  } },
   { rule =
@@ -549,4 +552,4 @@ client.connect_signal("manage", function(c,b)
   end
 end)
 
--- vim: foldmethod=marker:filetype=lua:expandtab:shiftwidth=2:tabstop=2:softtabstop=2:encoding=utf-8:textwidth=80
+-- vim: foldmethod=marker:filetype=lua:expandtab:shiftwidth=2:tabstop=2:softtabstop=2:textwidth=80
