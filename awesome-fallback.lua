@@ -169,7 +169,7 @@ mytasklist.buttons = awful.util.table.join(
 
 for s = 1, screen.count() do
     -- Create a promptbox for each screen
-    mypromptbox[s] = awful.widget.prompt()
+    mypromptbox[s] = awful.widget.prompt({ layout = awful.widget.layout.horizontal.leftright })
     -- Create an imagebox widget which will contains an icon indicating which layout we're using.
     -- We need one layoutbox per screen.
     mylayoutbox[s] = awful.widget.layoutbox(s)
@@ -180,10 +180,12 @@ for s = 1, screen.count() do
                awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end)
               ))
     -- Create a taglist widget
-    mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, mytaglist.buttons)
+    mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.label.all, mytaglist.buttons)
 
     -- Create a tasklist widget
-    mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist.buttons)
+    mytasklist[s] = awful.widget.tasklist(function(c)
+      return awful.widget.tasklist.label.currenttags(c, s)
+      end, mytasklist.buttons)
 
     -- Create the wibox
     mywibox[s] = awful.wibox({ position = "top", screen = s })
@@ -393,6 +395,9 @@ awful.rules.rules =  {
                      keys = clientkeys,
                      buttons = clientbuttons } },
   { rule =
+    { class = "Plasma" },
+    properties = { floating = true } },
+  { rule =
     { class = "URxvt" },
     properties = { tag=tags[1][1], switchtotag = true, size_hints_honor = false } },
   { rule =
@@ -401,6 +406,21 @@ awful.rules.rules =  {
   { rule =
     { class = "Dolphin" },
     properties = { tag=tags[1][3], switchtotag = true } },
+  { rule =
+    { class = "Konversation" },
+    properties = { tag=tags[1][8]} },
+  { rule =
+    { class = "Quasselclient" },
+    properties = { tag=tags[1][8]} },
+  { rule =
+    { name = "Ordnererstellung" },
+    properties = { floating = true, tag=tags[1][3], switchtotag = true } },
+  { rule =
+    { name = "Verschiebevorgang" },
+    properties = { floating = true, tag=tags[1][3], switchtotag = true } },
+  { rule =
+    { name = "Kopiervorgang" },
+    properties = { floating = true, tag=tags[1][3], switchtotag = true } },
   { rule =
     { class = "pinentry" },
     properties = { floating = true  } },
@@ -423,7 +443,7 @@ awful.rules.rules =  {
     { class = "kio_uiserver" }, --KDE copy window
     properties = { floating = true  } },
   { rule =
-    { class = "otrdecoder-gui" },
+    { class = "Otrdecoder-gui" },
     properties = { floating = true  } },
   { rule =
     { instance = "Extension" },
@@ -453,8 +473,11 @@ awful.rules.rules =  {
     { class = "OpenOffice.org 3.2" },
     properties = { tag = tags[1][5] } },
   { rule =
-    { class = "Kdevelop.bin" },
+    { class = "Kdevelop" },
     properties = { tag = tags[1][6] } },
+  { rule =
+    { class = "Assistant" },
+    properties = { tag = tags[1][7] } },
   { rule =
     { class = "Eclipse" },
     properties = { tag = tags[1][6] } },
@@ -531,4 +554,4 @@ client.add_signal("manage", function(c,b)
   end
 end)
 
--- vim: foldmethod=marker:filetype=lua:expandtab:shiftwidth=2:tabstop=2:softtabstop=2:encoding=utf-8:textwidth=80
+-- vim: foldmethod=marker:filetype=lua:expandtab:shiftwidth=2:tabstop=2:softtabstop=2:textwidth=80
