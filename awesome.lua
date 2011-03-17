@@ -321,7 +321,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Shift" }, "x", function () awful.util.spawn("chromium") end),
     awful.key({ modkey, "Shift" }, "t", function () awful.util.spawn("thunderbird") end),
     --awful.key({ modkey, "Shift" }, "a", function () awful.util.spawn("amarok") end),
-    awful.key({ modkey, "Shift" }, "i", function () awful.util.spawn("kopete") end),
+    awful.key({ modkey, "Shift" }, "i", function () awful.util.spawn("pidgin") end),
     --awful.key({ modkey, "Shift" }, "e", function () awful.util.spawn("eclipse-3.5 -nosplash") end),
     awful.key({ modkey,  }, "F12", function () awful.util.spawn("/home/sdoerner/bin/xpop") end),
     awful.key({ modkey, "Shift" }, "b", function () awful.util.spawn(filemanager) end)
