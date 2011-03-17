@@ -494,6 +494,12 @@ awful.rules.rules =  {
     { class = "tvbrowser-TVBrowser" },
     properties = { tag = tags[1][8] } },
   { rule =
+    { role = "conversation" },
+    properties = { tag = tags[1][9], floating=true } },
+  { rule =
+    { role = "buddy_list" },
+    properties = { tag = tags[1][9], maximized_vertical = true } },
+  { rule =
     { class = "Kopete" },
     properties = { tag = tags[1][9], maximized_vertical = true } },
   { rule =
