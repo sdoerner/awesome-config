@@ -476,7 +476,7 @@ awful.rules.rules =  {
     { class = "OpenOffice.org 3.2" },
     properties = { tag = tags[1][5] } },
   { rule =
-    { class = "Kdevelop.bin" },
+    { class = "Kdevelop" },
     properties = { tag = tags[1][6] } },
   { rule =
     { class = "Eclipse" },
