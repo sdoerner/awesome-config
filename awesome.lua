@@ -476,6 +476,18 @@ awful.rules.rules =  {
     { class = "Thunderbird" },
     properties = { tag = tags[1][4] } },
   { rule =
+    { class = "libreoffice-writer" },
+    properties = { tag = tags[1][5] } },
+  { rule =
+    { class = "libreoffice-calc" },
+    properties = { tag = tags[1][5] } },
+  { rule =
+    { class = "libreoffice-base" },
+    properties = { tag = tags[1][5] } },
+  { rule =
+    { class = "libreoffice-impress" },
+    properties = { tag = tags[1][5] } },
+  { rule =
     { class = "OpenOffice.org 3.2" },
     properties = { tag = tags[1][5] } },
   { rule =
