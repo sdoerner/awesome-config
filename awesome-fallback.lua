@@ -68,11 +68,11 @@ networkmenu =
 
 officemenu =
 {
-  { "OO Writer", "oowriter", "/usr/share/pixmaps/ooo-writer.png" },
-  { "OO Calc", "oocalc", "/usr/share/pixmaps/ooo-calc.png" },
-  { "OO Impress", "ooimpress", "/usr/share/pixmaps/ooo-impress.png" },
-  { "OO Base", "oobase", "/usr/share/pixmaps/ooo-base.png" },
-  { "OO Math", "oomath", "/usr/share/pixmaps/ooo-math.png" },
+  { "OO Writer", "lowriter", "/usr/share/icons/hicolor/16x16/apps/libreoffice-writer.png" },
+  { "OO Calc", "localc", "/usr/share/icons/hicolor/16x16/apps/libreoffice-calc.png" },
+  { "OO Impress", "loimpress", "/usr/share/icons/hicolor/16x16/apps/libreoffice-impress.png" },
+  { "OO Base", "lobase", "/usr/share/icons/hicolor/16x16/apps/libreoffice-base.png" },
+  { "OO Math", "lomath", "/usr/share/icons/hicolor/16x16/apps/libreoffice-math.png" },
   { "Maple 11", "env WINEPREFIX='/home/sdoerner/.wine' wine 'C:\\Programme\\Maple 11\\bin.win\\maplew.exe'" }
 }
 
@@ -102,7 +102,7 @@ mainmenu = awful.menu.new( { items = {
     { "Grafik", graphicsmenu, "/usr/share/icons/gnome/16x16/categories/applications-graphics.png" },
     { "Multimedia", multimediamenu , "/usr/share/icons/hicolor/16x16/apps/amarok.png" },
     { "Netzwerk", networkmenu,"/usr/share/icons/gnome/16x16/categories/applications-internet.png" },
-    { "Office", officemenu, "/usr/share/pixmaps/ooo-writer.png" },
+    { "Office", officemenu, "/usr/share/icons/hicolor/16x16/apps/libreoffice-writer.png" },
     { "Eclipse", "eclipse-3.5 -nosplash","/usr/lib/eclipse-3.5/icon.xpm" },
     { "awesome", awesomemenu, beautiful.awesome_icon },
     { "Taskmanager", "/usr/bin/ksysguard", "/usr/share/icons/oxygen/16x16/apps/computer.png" },
@@ -179,8 +179,8 @@ for s = 1, screen.count() do
 
     -- Create a tasklist widget
     mytasklist[s] = awful.widget.tasklist(function(c)
-      return awful.widget.tasklist.label.currenttags(c, s)
-      end, mytasklist.buttons)
+                                            return awful.widget.tasklist.label.currenttags(c, s)
+                                          end, mytasklist.buttons)
 
     -- Create the wibox
     mywibox[s] = awful.wibox({ position = "top", screen = s })
@@ -271,46 +271,48 @@ globalkeys = awful.util.table.join(
             awful.util.getdir("cache") .. "/history_eval")
         end),
     --Dynamic tagging
-    awful.key({ modkey, "Shift" }, "n", --move
-      function() awful.tag.move(awful.tag.getidx() - 1) end),
-    awful.key({ modkey, "Shift" }, "m",
-      function() awful.tag.move(awful.tag.getidx() + 1) end),
-    awful.key({ modkey,           }, "i", function() --add
-        local scr = mouse.screen
-        prefix = #screen[scr]:tags() + 1 .. ":"
-        awful.prompt.run(
-            {text = prefix},
-            mypromptbox[mouse.screen].widget,
-            function(name)
-                if name == nil or #name == 0 then return end;
-                awful.tag.viewonly(
-                    awful.tag.add(name,
-                    {screen = mouse.screen,
-                    layout = awful.layout.suit.tile,
-                    mwfact = 0.55}))
-            end)
-        end),
-    awful.key({ modkey, "Shift" }, "o", function() --delete
-      local t = awful.tag.selected(1)
-      for _,v in ipairs(tags[1]) do
-        if v == t then
-        -- don't allow deletion of standard tags, as this destroys the key mappings
-          return
-        end
-      end
-      awful.tag.delete(t, tags[1][1])
-    end),
-    awful.key({ modkey,           }, "b", function() --rename
-        local tag = awful.tag.selected(1)
-        local prefix = tag.name
-        awful.prompt.run(
-            {text = prefix},
-            mypromptbox[mouse.screen].widget,
-            function(name)
-                if name == nil or #name == 0 then return end;
-                tag.name = name
-            end)
-        end),
+    --[[
+       [awful.key({ modkey, "Shift" }, "n", --move
+       [  function() awful.tag.move(awful.tag.getidx() - 1) end),
+       [awful.key({ modkey, "Shift" }, "m",
+       [  function() awful.tag.move(awful.tag.getidx() + 1) end),
+       [awful.key({ modkey,           }, "i", function() --add
+       [    local scr = mouse.screen
+       [    prefix = #screen[scr]:tags() + 1 .. ":"
+       [    awful.prompt.run(
+       [        {text = prefix},
+       [        mypromptbox[mouse.screen].widget,
+       [        function(name)
+       [            if name == nil or #name == 0 then return end;
+       [            awful.tag.viewonly(
+       [                awful.tag.add(name,
+       [                {screen = mouse.screen,
+       [                layout = awful.layout.suit.tile,
+       [                mwfact = 0.55}))
+       [        end)
+       [    end),
+       [awful.key({ modkey, "Shift" }, "o", function() --delete
+       [  local t = awful.tag.selected(1)
+       [  for _,v in ipairs(tags[1]) do
+       [    if v == t then
+       [    -- don't allow deletion of standard tags, as this destroys the key mappings
+       [      return
+       [    end
+       [  end
+       [  awful.tag.delete(t, tags[1][1])
+       [end),
+       [awful.key({ modkey,           }, "b", function() --rename
+       [    local tag = awful.tag.selected(1)
+       [    local prefix = tag.name
+       [    awful.prompt.run(
+       [        {text = prefix},
+       [        mypromptbox[mouse.screen].widget,
+       [        function(name)
+       [            if name == nil or #name == 0 then return end;
+       [            tag.name = name
+       [        end)
+       [    end),
+       ]]
     --My Bindings
     awful.key({ modkey, "Shift" }, "f", function () awful.util.spawn("firefox") end),
     awful.key({ modkey, "Shift" }, "x", function () awful.util.spawn("chromium") end),
@@ -492,7 +494,7 @@ awful.rules.rules =  {
     { class = "maple.exe" },
     properties = { tag = tags[1][8] } },
   { rule =
-    { class = "Otr.py" },
+    { class = "Otrverwaltung" },
     properties = { tag = tags[1][8] } },
   { rule =
     { class = "tvbrowser-TVBrowser" },

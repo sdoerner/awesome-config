@@ -68,11 +68,11 @@ networkmenu =
 
 officemenu =
 {
-  { "OO Writer", "oowriter", "/usr/share/pixmaps/ooo-writer.png" },
-  { "OO Calc", "oocalc", "/usr/share/pixmaps/ooo-calc.png" },
-  { "OO Impress", "ooimpress", "/usr/share/pixmaps/ooo-impress.png" },
-  { "OO Base", "oobase", "/usr/share/pixmaps/ooo-base.png" },
-  { "OO Math", "oomath", "/usr/share/pixmaps/ooo-math.png" },
+  { "OO Writer", "lowriter", "/usr/share/icons/hicolor/16x16/apps/libreoffice-writer.png" },
+  { "OO Calc", "localc", "/usr/share/icons/hicolor/16x16/apps/libreoffice-calc.png" },
+  { "OO Impress", "loimpress", "/usr/share/icons/hicolor/16x16/apps/libreoffice-impress.png" },
+  { "OO Base", "lobase", "/usr/share/icons/hicolor/16x16/apps/libreoffice-base.png" },
+  { "OO Math", "lomath", "/usr/share/icons/hicolor/16x16/apps/libreoffice-math.png" },
   { "Maple 11", "env WINEPREFIX='/home/sdoerner/.wine' wine 'C:\\Programme\\Maple 11\\bin.win\\maplew.exe'" }
 }
 
@@ -102,7 +102,7 @@ mainmenu = awful.menu.new( { items = {
     { "Grafik", graphicsmenu, "/usr/share/icons/gnome/16x16/categories/applications-graphics.png" },
     { "Multimedia", multimediamenu , "/usr/share/icons/hicolor/16x16/apps/amarok.png" },
     { "Netzwerk", networkmenu,"/usr/share/icons/gnome/16x16/categories/applications-internet.png" },
-    { "Office", officemenu, "/usr/share/pixmaps/ooo-writer.png" },
+    { "Office", officemenu, "/usr/share/icons/hicolor/16x16/apps/libreoffice-writer.png" },
     { "Eclipse", "eclipse-3.5 -nosplash","/usr/lib/eclipse-3.5/icon.xpm" },
     { "awesome", awesomemenu, beautiful.awesome_icon },
     { "Taskmanager", "/usr/bin/ksysguard", "/usr/share/icons/oxygen/16x16/apps/computer.png" },
