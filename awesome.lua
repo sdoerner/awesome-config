@@ -103,7 +103,7 @@ mainmenu = awful.menu.new( { items = {
     { "Grafik", graphicsmenu, "/usr/share/icons/gnome/16x16/categories/applications-graphics.png" },
     { "Multimedia", multimediamenu , "/usr/share/icons/hicolor/16x16/apps/amarok.png" },
     { "Netzwerk", networkmenu,"/usr/share/icons/gnome/16x16/categories/applications-internet.png" },
-    { "Office", officemenu, "/usr/share/icons/hicolor/16x16/apps/libreoffice-writer.png" },
+    { "Office", officemenu},
     { "Eclipse", "eclipse-3.5 -nosplash","/usr/lib/eclipse-3.5/icon.xpm" },
     { "awesome", awesomemenu, beautiful.awesome_icon },
     { "Kcalc", "kcalc" , "/usr/share/icons/oxygen/22x22/apps/accessories-calculator.png" },
@@ -655,4 +655,4 @@ function battery()
   mytimer:start()
 
 
--- vim: foldmethod=marker:filetype=lua:expandtab:shiftwidth=2:tabstop=2:softtabstop=2:encoding=utf-8:textwidth=80
+-- vim: foldmethod=marker:filetype=lua:expandtab:shiftwidth=2:tabstop=2:softtabstop=2:extwidth=80
