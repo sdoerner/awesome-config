@@ -202,6 +202,8 @@ for s = 1, screen.count() do
     }
     table.insert(right_aligned, mytextclock)
     if s == 1 then table.insert(right_aligned, mysystray) end
+    if  s == 1 then table.insert(right_aligned, mybatterybox) end
+    if  s == 1 then table.insert(right_aligned, volumewidget.widget) end
     table.insert(right_aligned, mylayoutbox[s])
 
     -- Add widgets to the wibox - order matters
@@ -211,11 +213,6 @@ for s = 1, screen.count() do
       mytaglist[s],
       mypromptbox[s],
       right_aligned,
-      mylayoutbox[s],
-      s == 1 and mysystray or nil,
-      s == 1 and mybatterybox or nil,
-      mytextclock,
-      s == 1 and volumewidget.widget or nil,
       mytasklist[s],
       layout = awful.widget.layout.horizontal.leftright,
       height = mywibox[s].height
