@@ -99,14 +99,14 @@ awesomemenu = {
 }
 
 mainmenu = awful.menu.new( { items = {
-    { "Grafik", graphicsmenu, "/usr/share/icons/gnome/16x16/categories/applications-graphics.png" },
-    { "Multimedia", multimediamenu , "/usr/share/icons/hicolor/16x16/apps/amarok.png" },
-    { "Netzwerk", networkmenu,"/usr/share/icons/gnome/16x16/categories/applications-internet.png" },
-    { "Office", officemenu, "/usr/share/icons/hicolor/16x16/apps/libreoffice-writer.png" },
-    { "Eclipse", "eclipse-3.5 -nosplash","/usr/lib/eclipse-3.5/icon.xpm" },
+    --{ "Grafik", graphicsmenu },
+    --{ "Multimedia", multimediamenu , "/usr/share/icons/hicolor/16x16/apps/amarok.png" },
+    --{ "Netzwerk", networkmenu,"/usr/share/icons/gnome/16x16/categories/applications-internet.png" },
+    --{ "Office", officemenu, "/usr/share/icons/hicolor/16x16/apps/libreoffice-writer.png" },
+    --{ "Eclipse", "eclipse-3.5 -nosplash","/usr/lib/eclipse-3.5/icon.xpm" },
     { "awesome", awesomemenu, beautiful.awesome_icon },
-    { "Taskmanager", "/usr/bin/ksysguard", "/usr/share/icons/oxygen/16x16/apps/computer.png" },
-    { "Kcalc", "kcalc" , "/usr/share/icons/oxygen/22x22/apps/accessories-calculator.png" },
+    --{ "Taskmanager", "/usr/bin/ksysguard", "/usr/share/icons/oxygen/16x16/apps/computer.png" },
+    --{ "Kcalc", "kcalc" , "/usr/share/icons/oxygen/22x22/apps/accessories-calculator.png" },
     { "Files", filemanager, filemanager_logo },
     { "open terminal", terminal }
     } })
@@ -470,7 +470,7 @@ awful.rules.rules =  {
     { class = "Firefox" },
     properties = { tag = tags[1][2] } },
   { rule =
-    { class = "Chromium-browser" },
+    { class = "Chromium" },
     properties = { tag = tags[1][2] } },
   { rule =
     { class = "Thunderbird" },
@@ -514,6 +514,12 @@ awful.rules.rules =  {
   { rule =
     { class = "Kopete" },
     properties = { tag = tags[1][9], maximized_vertical = true } },
+  { rule =
+    { class = "Telepathy-kde-contactlist" },
+    properties = { tag = tags[1][9], maximized_vertical = true } },
+  { rule =
+    { class = "Telepathy-kde-text-ui" },
+    properties = { tag = tags[1][9], floating = true } },
   { rule =
     { class = "Amarok" },
     properties = { tag = tags[1][9] } },
