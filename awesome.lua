@@ -521,7 +521,7 @@ awful.rules.rules =  {
     { class = "Telepathy-kde-text-ui" },
     properties = { tag = tags[1][9], floating = true } },
   { rule =
-    { class = "Amarok" },
+    { class = "Clementine" },
     properties = { tag = tags[1][9] } },
   { rule =
     { class = "Gobby" },
