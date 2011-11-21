@@ -413,6 +413,9 @@ awful.rules.rules =  {
     { class = "Dolphin" },
     properties = { tag=tags[1][3], switchtotag = true } },
   { rule =
+    { class = "Gwenview" },
+    properties = { tag=tags[1][5], switchtotag = true } },
+  { rule =
     { class = "Konversation" },
     properties = { tag=tags[1][8]} },
   { rule =
