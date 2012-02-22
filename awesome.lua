@@ -339,6 +339,8 @@ clientkeys = awful.util.table.join(
         end),
     awful.key({ modkey }, "m",
         function (c)
+            c = client.focus or c
+            c:raise()
             c.maximized_horizontal = not c.maximized_horizontal
             c.maximized_vertical   = not c.maximized_vertical
         end)
