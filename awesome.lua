@@ -406,6 +406,9 @@ awful.rules.rules =  {
     { class = "Plasma" },
     properties = { floating = true } },
   { rule =
+    { class = "Exe" }, -- Full Screen Flash Player should not be tiled
+    properties = { floating = true } },
+  { rule =
     { class = "URxvt" },
     properties = { tag=tags[1][1], switchtotag = true, size_hints_honor = false } },
   { rule =
