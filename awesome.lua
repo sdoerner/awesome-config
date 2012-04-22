@@ -586,4 +586,5 @@ client.add_signal("manage", function(c,b)
   end
 end)
 
+
 -- vim: foldmethod=marker:filetype=lua:expandtab:shiftwidth=2:tabstop=2:softtabstop=2:textwidth=80
