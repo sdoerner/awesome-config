@@ -521,6 +521,9 @@ awful.rules.rules =  {
     { class = "tvbrowser-TVBrowser" },
     properties = { tag = tags[1][8] } },
   { rule =
+    { class = "Spotify" },
+    properties = { tag = tags[1][8] } },
+  { rule =
     { class = "Kopete" },
     properties = { tag = tags[1][9], maximized_vertical = true } },
   { rule =
