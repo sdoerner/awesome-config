@@ -415,7 +415,13 @@ awful.rules.rules =  {
   { rule =
     { class = "Gitk" },
     --properties = { maximized_horizontal = true, maximized_vertical = true },
-    callback = function(c) if screen.count() == 2 then awful.client.movetoscreen(c, 2) end end },
+    callback = function(c)
+      if screen.count() == 2 then
+        awful.client.movetoscreen(c, 2)
+      else
+        awful.client.movetotag(tags[1][5],c)
+        awful.tag.viewonly(tags[1][5])
+      end end },
   { rule =
     { class = "Dolphin" },
     properties = { tag=tags[1][3], switchtotag = true } },
