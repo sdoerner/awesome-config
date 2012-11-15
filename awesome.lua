@@ -396,6 +396,15 @@ clientbuttons = awful.util.table.join(
 -- }}}
 
 -- {{{ Rules
+-- callback for rules, which puts the client on tag tagNo of the current screen
+function moveToTagOnCurrentScreen(tagNo, switchtotag)
+  switchtotag = switchtotag or false
+  return function(c)
+    awful.client.movetotag(tags[mouse.screen][tagNo], c)
+    if switchtotag then awful.tag.viewonly(tags[mouse.screen][tagNo]) end
+  end
+end
+
 awful.rules.rules =  {
     { rule = { },
       properties = { border_width = beautiful.border_width,
@@ -411,7 +420,8 @@ awful.rules.rules =  {
     properties = { floating = true } },
   { rule =
     { class = "URxvt" },
-    properties = { tag=tags[1][1], switchtotag = true, size_hints_honor = false } },
+    callback = moveToTagOnCurrentScreen(1, true),
+    properties = { size_hints_honor = false } },
   { rule =
     { class = "Gitk" },
     --properties = { maximized_horizontal = true, maximized_vertical = true },
@@ -487,7 +497,7 @@ awful.rules.rules =  {
     properties = { tag = tags[1][2] } },
   { rule =
     { class = "Chromium" },
-    properties = { tag = tags[1][2] } },
+    callback = moveToTagOnCurrentScreen(2) },
   { rule =
     { class = "Thunderbird" },
     properties = { tag = tags[1][4] } },
