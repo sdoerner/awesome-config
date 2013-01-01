@@ -499,9 +499,6 @@ awful.rules.rules =  {
     { class = "Chromium", type = "normal" },
     callback = moveToTagOnCurrentScreen(2) },
   { rule =
-    { class = "Thunderbird" },
-    properties = { tag = tags[1][4] } },
-  { rule =
     { class = "libreoffice-writer" },
     properties = { tag = tags[1][5] } },
   { rule =
