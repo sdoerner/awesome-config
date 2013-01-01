@@ -433,7 +433,7 @@ awful.rules.rules =  {
         awful.tag.viewonly(tags[1][5])
       end end },
   { rule =
-    { class = "Dolphin" },
+    { class = "Dolphin", type="normal" },
     properties = { tag=tags[1][3], switchtotag = true } },
   { rule =
     { class = "Gwenview" },
@@ -496,7 +496,7 @@ awful.rules.rules =  {
     { class = "Firefox" },
     properties = { tag = tags[1][2] } },
   { rule =
-    { class = "Chromium" },
+    { class = "Chromium", type = "normal" },
     callback = moveToTagOnCurrentScreen(2) },
   { rule =
     { class = "Thunderbird" },
